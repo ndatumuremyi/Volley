@@ -40,7 +40,8 @@ public class AddActivity extends AppCompatActivity {
                 Memory memory = new Memory(memoryF.getText().toString(), province.getName());
                dbHandler.addMemory(memory);
 
-               finish();
+               Intent intent1 = new Intent(AddActivity.this, MemoriesActivity.class);
+               startActivity(intent1);
             }
         });
     }

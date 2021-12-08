@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener listener =  new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Province selectedProvince =(Province) view.getTag(0);
+            Province selectedProvince =(Province) view.getTag();
             Intent intent = new Intent(MainActivity.this, AddActivity.class);
             intent.putExtra("selectedProvince",selectedProvince);
             startActivity(intent);
@@ -45,11 +46,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-
-
-
-
         getData();
+
+        Button seeMemories = findViewById(R.id.seeMemories);
+        seeMemories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, MemoriesActivity.class);
+                startActivity(intent);
+            }
+        });
     }
     public void displayProvince(){
         Log.d("TEST","DADADADADAD");

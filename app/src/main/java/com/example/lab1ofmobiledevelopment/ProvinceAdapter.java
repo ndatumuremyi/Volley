@@ -25,7 +25,7 @@ public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceHolder> {
     @Override
     public ProvinceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         view= LayoutInflater.from(parent.getContext()).inflate(R.layout.province_row ,parent,false);
-//        view.setOnClickListener(listener);
+        view.setOnClickListener(listener);
         return new ProvinceHolder(view);
     }
 
@@ -33,7 +33,7 @@ public class ProvinceAdapter extends RecyclerView.Adapter<ProvinceHolder> {
     public void onBindViewHolder(ProvinceHolder holder, int position) {
         Province province=contactList.get(position);
         holder.provinceName.setText(province.getName());
-        view.setTag(0,province);
+        view.setTag(province);
 
     }
 
