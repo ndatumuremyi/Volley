@@ -4,18 +4,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "memoryManager";
-    private static final String TABLE_MEMORIES = "memories";
+    private static final String DATABASE_NAME = "foodManager";
+    private static final String TABLE_FOODS = "foods";
     private static final String KEY_ID = "id";
-    private static final String KEY_MEMORY = "memory";
-    private static final String KEY_PROVINCE = "province";
+    private static final String KEY_LABEL = "laber";
+    private static final String KEY_CATEGORY = "category";
+    private static final String KEY_quantity = "quantity";
+
 
 
     public DatabaseHandler(Context context) {
@@ -26,34 +27,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_MEMORY_TABLE = "CREATE TABLE " + TABLE_MEMORIES + "("
+        String CREATE_FOOD_TABLE = "CREATE TABLE " + TABLE_FOODS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY,"
-                + KEY_MEMORY + " TEXT,"
-                + KEY_PROVINCE + " TEXT"
-                  + ")";
-        db.execSQL(CREATE_MEMORY_TABLE);
+                + KEY_LABEL + " TEXT,"
+                + KEY_CATEGORY + " TEXT,"
+                + KEY_quantity + " INTEGER"
+                + ")";
+        db.execSQL(CREATE_FOOD_TABLE);
     }
 
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEMORIES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FOODS);
 
         // Create tables again
         onCreate(db);
     }
 
-    // code to add the new memory
-    long addMemory(Memory memory) {
+    // code to add the new Food
+    long addFood(Food food) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_MEMORY, memory.getMemory()); // Contact Name
-        values.put(KEY_PROVINCE, memory.getProvince().getName()); // Contact Name
+        values.put(KEY_LABEL, food.getLabel()); // Contact Name
+        values.put(KEY_CATEGORY, food.getCategory()); // Contact Name
+        values.put(KEY_quantity, food.getQuantity());
 
         // Inserting Row
-        long d= db.insert(TABLE_MEMORIES, null, values);
+        long d= db.insert(TABLE_FOODS, null, values);
         //2nd argument is String containing nullColumnHack
 
         db.close(); // Closing database connection
@@ -61,27 +64,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // code to get the single contact
-    Memory getMemory(int id) {
+    Food getFood(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_MEMORIES, new String[] { KEY_ID,
-                        KEY_MEMORY, KEY_MEMORY }, KEY_ID + "=?",
+        Cursor cursor = db.query(TABLE_FOODS, new String[] { KEY_ID,
+                        KEY_LABEL, KEY_CATEGORY, KEY_quantity}, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
         int mid=cursor.getInt(0);
-        String memory_m=cursor.getString(1);
-        String province=cursor.getString(2);
-        Memory memory = new Memory(mid,memory_m, province);
+        String label=cursor.getString(1);
+        String category=cursor.getString(2);
+        int quantity = cursor.getInt(3);
+        Food food = new Food(mid,label, category);
+        food.setQuantity(quantity);
         // return contact
-        return memory;
+        return food;
     }
 
     // code to get all contacts in a list view
-    public List<Memory> getAllMemory() {
-        List<Memory> memoryList = new ArrayList<>();
+    public ArrayList<Food> getAllFood() {
+        ArrayList<Food> foodList = new ArrayList<>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_MEMORIES;
+        String selectQuery = "SELECT  * FROM " + TABLE_FOODS;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -89,44 +94,46 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Memory memory = new Memory();
-                memory.setId(Integer.parseInt(cursor.getString(0)));
-                memory.setMemory(cursor.getString(1));
-                memory.setProvince(new Province( cursor.getString(2)));
-                // Adding memory to list
-                memoryList.add(memory);
-//                Log.d("Data: ",memory.getFirstname()+memory.getLastname()+memory.getTelephone());
+                Food food = new Food();
+                food.setFoodId(Integer.parseInt(cursor.getString(0)));
+                food.setLabel(cursor.getString(1));
+                food.setCategory(cursor.getString(2));
+                food.setQuantity(cursor.getInt(3));
+                // Adding food to list
+                foodList.add(food);
+//                Log.d("Data: ",food.getFirstname()+food.getLastname()+food.getTelephone());
             } while (cursor.moveToNext());
         }
 
         // return contact list
-        return memoryList;
+        return foodList;
     }
 
     // code to update the single contact
-    public int updateMemory(Memory memory) {
+    public int updateFood(Food food) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_MEMORY, memory.getMemory());
-        values.put(KEY_PROVINCE, memory.getProvince().getName());
+        values.put(KEY_LABEL, food.getLabel());
+        values.put(KEY_CATEGORY, food.getCategory());
+        values.put(KEY_quantity,food.getQuantity());
 
         // updating row
-        return db.update(TABLE_MEMORIES, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(memory.getId()) });
+        return db.update(TABLE_FOODS, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(food.getFoodId()) });
     }
 
     // Deleting single contact
-    public void deleteContact(Memory memory) {
+    public void deleteFood(Food food) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_MEMORIES, KEY_ID + " = ?",
-                new String[] { String.valueOf(memory.getId()) });
+        db.delete(TABLE_FOODS, KEY_ID + " = ?",
+                new String[] { String.valueOf(food.getFoodId()) });
         db.close();
     }
 
     // Getting contacts Count
     public int getMemoriesCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_MEMORIES;
+        String countQuery = "SELECT  * FROM " + TABLE_FOODS;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();

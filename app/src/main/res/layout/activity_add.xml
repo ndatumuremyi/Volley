@@ -7,23 +7,32 @@
     tools:context=".AddActivity">
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/memoryField"
+        android:id="@+id/quantityField"
         android:layout_width="match_parent"
         android:layout_height="173dp"
         android:layout_marginTop="68dp"
-        android:hint="type your memory"
+        android:inputType="number"
+        android:hint="Quantity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/saveB"
+        android:id="@+id/updateB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
         android:layout_marginEnd="52dp"
         android:text="save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/memoryField" />
+        app:layout_constraintTop_toBottomOf="@+id/quantityField" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter quantity"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

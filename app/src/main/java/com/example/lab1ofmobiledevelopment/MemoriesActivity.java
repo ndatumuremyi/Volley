@@ -10,15 +10,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MemoriesActivity extends AppCompatActivity {
     DatabaseHandler dbHandler;
-    List<Memory> memories;
+    ArrayList<Food> foods;
     RecyclerView recyclerView;
-    MemoryAdapter memoryAdapter;
+    FoodAdapter foodAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +28,19 @@ public class MemoriesActivity extends AppCompatActivity {
 
 
         dbHandler = new DatabaseHandler(this);
-        memories=dbHandler.getAllMemory();
-        memoryAdapter = new MemoryAdapter(memories);
+        foods=dbHandler.getAllFood();
+        foodAdapter = new FoodAdapter(foods, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MemoriesActivity.this, "update", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(MemoriesActivity.this, UpdateActivity.class);
+                Food selectedFood =(Food) view.getTag();
+
+                intent.putExtra("selectedFood", selectedFood);
+                startActivity(intent);
+            }
+        }, "display");
         recyclerView = (RecyclerView) findViewById(R.id.recyclerViewCont);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
@@ -36,7 +48,7 @@ public class MemoriesActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
-        recyclerView.setAdapter(memoryAdapter);
+        recyclerView.setAdapter(foodAdapter);
 
 
         Button button = findViewById(R.id.backButton);

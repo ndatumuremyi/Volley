@@ -3,11 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/pater/AndroidStudioProjects/Lab1OfMobileDevelopment/app/src/main/res/layout/activity_add.xml" value="0.26875" />
-        <entry key="..\:/Users/pater/AndroidStudioProjects/Lab1OfMobileDevelopment/app/src/main/res/layout/activity_main.xml" value="0.2546875" />
-        <entry key="..\:/Users/pater/AndroidStudioProjects/Lab1OfMobileDevelopment/app/src/main/res/layout/activity_memories.xml" value="0.26875" />
-        <entry key="..\:/Users/pater/AndroidStudioProjects/Lab1OfMobileDevelopment/app/src/main/res/layout/memory_row.xml" value="0.1" />
-        <entry key="..\:/Users/pater/AndroidStudioProjects/Lab1OfMobileDevelopment/app/src/main/res/layout/province_row.xml" value="0.1" />
+        <entry key="..\:/Users/pater/Downloads/Volley/Volley/app/src/main/res/layout/activity_add.xml" value="0.33" />
+        <entry key="..\:/Users/pater/Downloads/Volley/Volley/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/pater/Downloads/Volley/Volley/app/src/main/res/layout/activity_memories.xml" value="0.13645833333333332" />
+        <entry key="..\:/Users/pater/Downloads/Volley/Volley/app/src/main/res/layout/activity_update.xml" value="0.13645833333333332" />
+        <entry key="..\:/Users/pater/Downloads/Volley/Volley/app/src/main/res/layout/memory_row.xml" value="0.2640625" />
+        <entry key="..\:/Users/pater/Downloads/Volley/Volley/app/src/main/res/layout/province_row.xml" value="0.2640625" />
+        <entry key="..\:/Users/pater/Downloads/Volley/Volley/app/src/main/res/layout/row_food.xml" value="0.2640625" />
       </map>
     </option>
   </component>

@@ -32,14 +32,14 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener listener =  new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Province selectedProvince =(Province) view.getTag();
+            Food selectedFood =(Food) view.getTag();
             Intent intent = new Intent(MainActivity.this, AddActivity.class);
-            intent.putExtra("selectedProvince",selectedProvince);
+            intent.putExtra("selectedFood",selectedFood);
             startActivity(intent);
         }
     };
     RecyclerView recyclerView;
-    ProvinceAdapter adapter;
+    FoodAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,10 +66,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
     public void getData(){
-        ArrayList<Province> provinces = new ArrayList<>();
+        Log.d("TAG", "getData");
+        ArrayList<Food> foods = new ArrayList<>();
 
         RequestQueue requestQueue= Volley.newRequestQueue(this);
-        String url="https://rwanda.p.rapidapi.com/provinces";
+        String url="https://edamam-food-and-grocery-database.p.rapidapi.com/parser?ingr=apple";
         StringRequest request=new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -77,13 +78,20 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("RESPONSE",response);
                         try {
                             JSONObject jsonObject=new JSONObject(response);
-                            JSONArray jsonArray=jsonObject.getJSONArray("data");
+                            JSONArray jsonArray=jsonObject.getJSONArray("hints");
                             for(int i=0;i<jsonArray.length();i++){
-                                String prov=jsonArray.getString(i);
-                                Province province=new Province(prov);
-                                provinces.add(province);
+                                JSONObject foodE = jsonArray.getJSONObject(i).getJSONObject("food");
+                                Log.d("RESPONSE", "onResponse: " + foodE);
+//                                String prov=jsonArray.getString(i);
+//                                Province province=new Province(prov);
+                                Food food = new Food();
+
+                                food.setCategory(foodE.getString("category"));
+                                food.setLabel(foodE.getString("label"));
+                                foods.add(food);
+                                food.print();
                             }
-                            adapter = new ProvinceAdapter(provinces, listener);
+                            adapter = new FoodAdapter(foods, listener);
                             displayProvince();
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -95,14 +103,14 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("ERROR",error.getMessage());
+                Log.d("ERROR",error.toString());
             }
 
         }){
             @Override
             public Map<String,String> getHeaders(){
                 Map<String, String>  params = new HashMap<String, String>();
-                params.put("x-rapidapi-host", "rwanda.p.rapidapi.com");
+                params.put("x-rapidapi-host", "edamam-food-and-grocery-database.p.rapidapi.com");
                 params.put("x-rapidapi-key", "6b1d2a7879msh375f16e28cd9056p1d8f4bjsn415a8c9e4a27");
 
                 return params;
